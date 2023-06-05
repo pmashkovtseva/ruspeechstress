@@ -179,7 +179,7 @@ def clear_files(input_path='./wav_tg_all'):
 
 
 def main():
-    working_dir = '/home/sivh/thesis/code/stress-detector-master'
+    working_dir = 'REPLACE WITH YOUR WORKING DIRECTORY'
     print("Getting files and preprocessing audio and text...")
     files = get_files(working_dir)
     preprocess_audio(files)
