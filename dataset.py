@@ -10,18 +10,18 @@ import requests
 import xml.etree.ElementTree as Et
 import csv
 import textgrid
-from stress_detector import StressDetector, FEATURES
 
 
 class FileSizeError(Exception):
     pass
 
 
-def get_files(input_directory):
+def get_files(working_dir, input_directory='./dataset'):
     file_pairs = {}
-    for file in listdir(input_directory):
-        text = os.path.join(input_directory, file[:-4] + '.txt')
-        wav = os.path.join(input_directory, file)
+    dir = os.path.join(working_dir, input_directory)
+    for file in listdir(dir):
+        text = os.path.join(dir, file[:-4] + '.txt')
+        wav = os.path.join(dir, file)
         if file.endswith('.wav') and os.path.exists(text):
             file_pairs.update({wav: text})
         elif file.endswith('.wav') and not os.path.exists(text):
@@ -63,7 +63,6 @@ def transcribe_audio(input_files):
             result = model.transcribe(wav)
             with open(wav[:-4] + ".txt", "w", encoding="utf-8") as o:
                 o.write(result["text"].lower())
-    return get_files(input_files)
 
 
 def preprocess_text(input_files):
@@ -85,7 +84,7 @@ def preprocess_text(input_files):
             nw.write(' '.join(text_clear))
 
 
-def webmaus(input_files, out_path):
+def webmaus(input_files, working_dir, out_path='dataset/'):
     url = "https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/runPipeline"
     for wav, text in tqdm(input_files.items()):
         files = {
@@ -99,7 +98,7 @@ def webmaus(input_files, out_path):
         if res.status_code == 200:
             tree = Et.fromstring(res.text)
             res2 = requests.get(tree.find('downloadLink').text)
-            open(out_path + os.path.basename(wav)[:-4] + '.TextGrid', 'wb').write(res2.content)
+            open(os.path.join(working_dir, out_path + os.path.basename(wav)[:-4] + '.TextGrid'), 'wb').write(res2.content)
 
 
 def build_dictionary(input_path='data/dictionary.txt'):
@@ -130,7 +129,7 @@ def get_number_of_syllables(word):
         return stress_position
 
 
-def collect_dataset(input_files, dictionary, output_path='/wav_tg_all'):
+def collect_dataset(input_files, dictionary, output_path='./wav_tg_all'):
     n = 0
     all_data = []
     words = []
@@ -177,3 +176,26 @@ def clear_files(input_path='./wav_tg_all'):
         wav_file = file.strip('.TextGrid') + '.wav'
         if file.endswith('.TextGrid') and not os.path.exists(os.path.join(input_path, wav_file)):
             os.remove(os.path.join(input_path, file))
+
+
+def main():
+    working_dir = '/home/sivh/thesis/code/stress-detector-master'
+    print("Getting files and preprocessing audio and text...")
+    files = get_files(working_dir)
+    preprocess_audio(files)
+    get_size(files)
+    transcribe_audio(files)
+    files = get_files(working_dir)
+    preprocess_text(files)
+    print("Creating TextGrid files...")
+    webmaus(files, working_dir)
+    dictionary = build_dictionary()
+    print("Collecting dataset...")
+    collect_dataset(files, dictionary)
+    get_words()
+    clear_files()
+    print("Done.")
+
+
+if __name__ == '__main__':
+    main()
