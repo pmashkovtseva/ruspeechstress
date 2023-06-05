@@ -29,3 +29,4 @@ clf = DecisionTreeClassifier()
 evaluation = sd.train(clf)
 print('F1 Score: {}'.format(np.mean(evaluation['f1'])))
 ```
+for choosing best models and building a voting classifier please refer to ```find_model.py``` in the repo referred above.
