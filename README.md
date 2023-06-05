@@ -10,7 +10,7 @@ requirements:
 
 * R == 4.3.0
 
-how to collect dataset and train your models:
+how to collect your dataset and train your models:
 1. download repo files to your local machine
 2. download [dictionary.txt](https://drive.google.com/file/d/1ADm_03fx4NF9eMQBg4gdWUGoEBZFbH4N/view?usp=sharing) (credits to [(Gusev 2009)](https://github.com/IlyaGusev/russ)) and put it in the ```data``` folder
 3. put input files - audio recording and text transcriptions - in the ```dataset``` folder
