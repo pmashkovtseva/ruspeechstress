@@ -14,7 +14,7 @@ how to collect your dataset and train your models:
 1. download repo files to your local machine
 2. download [dictionary.txt](https://drive.google.com/file/d/1ADm_03fx4NF9eMQBg4gdWUGoEBZFbH4N/view?usp=sharing) (credits to [(Gusev 2009)](https://github.com/IlyaGusev/russ)) and put it in the ```data``` folder
 3. put input files - audio recording and text transcriptions - in the ```dataset``` folder
-4. change ```working_dir``` in the *main* function in ```dataset.py``` with your working directory path and run the script
+4. change ```working_dir``` in the ```main``` function in ```dataset.py``` with your working directory path and run the script
 5. from (Bernhard et al. 2022):
 ```python
 from stress_detector import StressDetector, FEATURES
