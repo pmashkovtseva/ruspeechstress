@@ -101,8 +101,8 @@ def webmaus(input_files, working_dir, out_path='dataset/'):
             open(os.path.join(working_dir, out_path + os.path.basename(wav)[:-4] + '.TextGrid'), 'wb').write(res2.content)
 
 
-def build_dictionary(input_path='data/dictionary.txt'):
-    with open(input_path, 'r', encoding='utf-8') as f:
+def build_dictionary(working_dir, input_path='data/dictionary.txt'):
+    with open(os.path.join(working_dir, input_path), 'r', encoding='utf-8') as f:
         paradigms = f.read().splitlines()
     stressed_dict = {}
     for paradigm in paradigms:
@@ -129,7 +129,7 @@ def get_number_of_syllables(word):
         return stress_position
 
 
-def collect_dataset(input_files, dictionary, output_path='./wav_tg_all'):
+def collect_dataset(working_dir, input_files, dictionary, output_path='./wav_tg_all'):
     n = 0
     all_data = []
     words = []
@@ -155,7 +155,7 @@ def collect_dataset(input_files, dictionary, output_path='./wav_tg_all'):
                     extract = sound[start_time:end_time]
                     counter_wav = 1
                     output_filename = word.mark + '_' + str(counter_wav) + '.wav'
-                    output_wav = os.path.join(output_path, output_filename)
+                    output_wav = os.path.join(os.path.join(working_dir, output_path), output_filename)
                     while os.path.exists(output_wav):
                         output_wav = output_wav.replace(f'_{counter_wav}.', f'_{counter_wav + 1}.')
                         counter_wav += 1
@@ -167,19 +167,19 @@ def collect_dataset(input_files, dictionary, output_path='./wav_tg_all'):
             tsv_output.writerow(row)
 
 
-def get_words():
-    subprocess.call(["Rscript", "scripts/get_words.R"])
+def get_words(working_dir):
+    subprocess.call(["Rscript", os.path.join(working_dir, "scripts/get_words.R")])
 
 
-def clear_files(input_path='./wav_tg_all'):
-    for file in os.listdir(input_path):
+def clear_files(working_dir, input_path='./wav_tg_all'):
+    for file in os.listdir(os.path.join(working_dir, input_path)):
         wav_file = file.strip('.TextGrid') + '.wav'
-        if file.endswith('.TextGrid') and not os.path.exists(os.path.join(input_path, wav_file)):
+        if file.endswith('.TextGrid') and not os.path.exists(os.path.join(os.path.join(working_dir, input_path), wav_file)):
             os.remove(os.path.join(input_path, file))
 
 
 def main():
-    working_dir = 'REPLACE WITH YOUR WORKING DIRECTORY'
+    working_dir = 'REPLACE WITH YOUR WORKING DIRECTORYr'
     print("Getting files and preprocessing audio and text...")
     files = get_files(working_dir)
     preprocess_audio(files)
@@ -189,11 +189,11 @@ def main():
     preprocess_text(files)
     print("Creating TextGrid files...")
     webmaus(files, working_dir)
-    dictionary = build_dictionary()
+    dictionary = build_dictionary(working_dir)
     print("Collecting dataset...")
-    collect_dataset(files, dictionary)
-    get_words()
-    clear_files()
+    collect_dataset(working_dir, files, dictionary)
+    get_words(working_dir)
+    clear_files(working_dir)
     print("Done.")
 
 
