@@ -12,6 +12,8 @@ requirements:
 
 * ffmpeg == 6.0
 
+* [rusyllab](https://github.com/Koziev/rusyllab) 0.0.4
+
 * requirements listed in `reqirements.txt`
 
 how to collect your dataset and train your models:
