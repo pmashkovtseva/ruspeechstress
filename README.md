@@ -10,7 +10,7 @@ requirements:
 
 * R == 4.3.0
 
-* ffmpeg
+* ffmpeg == 6.0
 
 * requirements listed in `reqirements.txt`
 
