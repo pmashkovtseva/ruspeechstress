@@ -250,7 +250,7 @@ def dataset(dataset_dir, dictionary_path=None, mode=None, model_path=None, scale
     files = get_files(dataset_dir)
     preprocess_text(files)
     print("Creating TextGrid files...")
-    # webmaus(files, working_dir)
+    webmaus(files, working_dir)
     if dictionary_path is None:
         raise NoDictProvided('No dictionary provided.')
     dictionary = build_dictionary(dictionary_path)
