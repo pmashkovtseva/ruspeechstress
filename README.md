@@ -15,3 +15,17 @@ requirements:
 * [rusyllab](https://github.com/Koziev/rusyllab) 0.0.4
 
 * requirements listed in `reqirements.txt`
+
+## usage
+
+```python
+pip install ruspeechstress
+```
+
+```python
+from ruspeechstress import create_dataset, train_model, extend_dictionary
+
+create_dataset(dataset_dir="path to .wav and .txt files", dictionary_path="path to dictionary.txt")
+train_model(dataset_dir="path to .wav and .txt files", features path="path to .tsv-features collected on previous step", clf='name of sklearn classifier')
+extend_dictionary(dataset_dir="path to .wav and .txt files", dictionary_path="path to dictionary.txt", classifier='path to .pkl classifier', scaler='path to .pkl scaler')
+```
